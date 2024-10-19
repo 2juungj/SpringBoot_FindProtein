@@ -50,16 +50,18 @@
 	</c:choose>
 
 	<!-- Page numbers -->
-	<c:forEach var="pageNumber" begin="0" end="${itemList.totalPages - 1}">
-		<c:choose>
-			<c:when test="${pageNumber eq itemList.number}">
-				<li class="page-item active" aria-current="page"><span class="page-link">${pageNumber + 1}</span></li>
-			</c:when>
-			<c:otherwise>
-				<li class="page-item"><a class="page-link" href="?page=${pageNumber}">${pageNumber + 1}</a></li>
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
+	<c:if test="${itemList.totalPages > 0}">
+		<c:forEach var="pageNumber" begin="0" end="${itemList.totalPages - 1}">
+			<c:choose>
+				<c:when test="${pageNumber eq itemList.number}">
+					<li class="page-item active" aria-current="page"><span class="page-link">${pageNumber + 1}</span></li>
+				</c:when>
+				<c:otherwise>
+					<li class="page-item"><a class="page-link" href="?page=${pageNumber}">${pageNumber + 1}</a></li>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+	</c:if>
 
 	<!-- Next page button -->
 	<c:choose>
