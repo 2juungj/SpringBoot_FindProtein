@@ -4,7 +4,8 @@
 
 
 <sec:authorize access="isAuthenticated()">
-	<sec:authentication property="principal" var="principal" /> <!-- property가 principal이면 현재 유저의 오브젝트에 접근 허용 -->
+	<sec:authentication property="principal" var="principal" />
+	<!-- property가 principal이면 현재 유저의 오브젝트에 접근 허용 -->
 </sec:authorize>
 
 <!DOCTYPE html>
@@ -37,6 +38,9 @@
 				</c:when>
 				<c:otherwise>
 					<ul class="navbar-nav">
+						<sec:authorize access="hasRole('ADMIN')">
+							<li class="nav-item"><a class="nav-link" href="/admin/addItemForm">상품등록</a></li>
+						</sec:authorize>
 						<li class="nav-item"><a class="nav-link" href="/user/updateForm">회원정보</a></li>
 						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 					</ul>

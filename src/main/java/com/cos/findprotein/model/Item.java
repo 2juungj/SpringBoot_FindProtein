@@ -20,23 +20,31 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 public class Item {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(nullable = false)
-	private String name;				// 상품명
-	
-	private String info;				// 상품 설명
-	
+	private String name; // 상품명
+
+	private String info; // 상품 설명
+
 	@Enumerated(EnumType.STRING)
-	private Category category; // 카테고리		// PROSUPPS
-	
+	private Category category; // 카테고리 // PROSUPPS
+
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private User user;					// 상품 등록자
-	
-	private String image;			// 이미지 링크
-	
+	private User user; // 상품 등록자
+
+	private String image; // 이미지 링크
+
+	@Builder
+	public Item(String name, String info, Category category, User user, String image) {
+		this.name = name;
+		this.info = info;
+		this.category = category;
+		this.user = user;
+		this.image = image;
+	}
 }
