@@ -35,10 +35,10 @@ public class SecurityConfig {
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http.csrf().disable(); // csrf 토큰 비활성화 (테스트 시 걸어두는 게 좋다.)
 		http.authorizeHttpRequests(
-				auth -> auth.requestMatchers("/","/auth/**", "/WEB-INF/**","js/**","/css/**","image/**","/dummy/**")
+				auth -> auth.requestMatchers("/","/auth/**", "/WEB-INF/**","js/**","/css/**","image/**","/dummy/**","/item/**")
 				.permitAll()
 				.requestMatchers(RegexRequestMatcher.regexMatcher("/board/\\d+")).permitAll()
-				//.requestMatchers("/board/**").hasRole("ADMIN")
+				.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 기능
 				.anyRequest()
 				.authenticated());
 		http.formLogin(f -> f.loginPage("/auth/loginForm")
