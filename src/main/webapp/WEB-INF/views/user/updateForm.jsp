@@ -2,6 +2,8 @@
 
 <%@ include file="../layout/header.jsp"%>
 
+<br>
+
 <div class="container">
 	<form action="/action_page.php">
 		<input type="hidden" id="id" value="${principal.user.id}"/>

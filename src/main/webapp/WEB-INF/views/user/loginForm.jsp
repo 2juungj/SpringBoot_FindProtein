@@ -2,6 +2,8 @@
 
 <%@ include file="../layout/header.jsp"%>
 
+<br>
+
 <div class="container">
 	<form action="/auth/loginProc" method="post">
 		<div class="form-group">
