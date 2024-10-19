@@ -28,6 +28,9 @@ public class Item {
 	@Column(nullable = false)
 	private String name; // 상품명
 
+	@Column(nullable = false)
+	private String encName; // URL 인코딩 된 상품명
+
 	private String info; // 상품 설명
 
 	@Enumerated(EnumType.STRING)
@@ -40,8 +43,9 @@ public class Item {
 	private String image; // 이미지 링크
 
 	@Builder
-	public Item(String name, String info, Category category, User user, String image) {
+	public Item(String name, String encName, String info, Category category, User user, String image) {
 		this.name = name;
+		this.encName = encName;
 		this.info = info;
 		this.category = category;
 		this.user = user;
