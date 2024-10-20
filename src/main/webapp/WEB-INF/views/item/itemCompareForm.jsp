@@ -7,6 +7,10 @@
 	<div class="col-md-12" style="text-align: center;">
 		<img alt="thumbnail" src="${nssItemList[0].image}" width="200" height="200">
 		<h1 class="page-header">${item.name}</h1>
+		<input type="hidden" value="${item.id}" id="id">
+		<sec:authorize access="hasRole('ADMIN')">
+			<input type="button" value="상품 삭제" id="btn-delete">
+		</sec:authorize>
 		<br>
 	</div>
 	<div class="row qnas" style="text-align: center;">
@@ -34,4 +38,5 @@
 	</div>
 </div>
 
+<script src="/js/item.js"></script>
 <%@ include file="../layout/footer.jsp"%>

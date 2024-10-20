@@ -40,6 +40,11 @@ public class ItemService {
 		naverShopSearchService.searchNaverShop(newItem);
 	}
 	
+	@Transactional
+	public void 상품삭제(int id) {
+		itemRepository.deleteById(id);
+	}
+	
 	@Transactional(readOnly = true)
 	public Page<Item> 글목록(Pageable pageable) {
 		return itemRepository.findAll(pageable);

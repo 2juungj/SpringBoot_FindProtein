@@ -3,6 +3,9 @@ let index = {
 		$("#btn-save").on("click", () => { 
 			this.save();
 		});
+		$("#btn-delete").on("click", () => { 
+			this.deleteById();
+		});
 	},
 
 	save: function() {
@@ -25,6 +28,26 @@ let index = {
 			else{
 				alert("상품등록 완료");
 				location.href = "/";
+			}
+			
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
+	},
+	
+	deleteById: function() {
+		let id = $("#id").val();
+		$.ajax({
+			type: "DELETE",
+			url: "/admin/deleteItem/" + id,
+			dataType: "json"
+		}).done(function(resp) {
+			if(resp.status === 500){
+				alert("상품삭제 실패");
+			}
+			else{
+				alert("상품삭제 완료");
+				location.href = "/item/itemListForm";
 			}
 			
 		}).fail(function(error) {
