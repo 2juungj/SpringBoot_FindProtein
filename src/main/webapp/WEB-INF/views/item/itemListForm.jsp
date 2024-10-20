@@ -20,8 +20,7 @@
 								<!-- Product name-->
 								<h5 class="fw-bolder">${item.name}</h5>
 								<!-- Product price-->
-								<!--상품 최저가도 API 연동 후 설정 -->
-								?원
+								${item.naverShopSearchItems[0].price}원
 							</div>
 						</div>
 						<!-- Product actions-->
