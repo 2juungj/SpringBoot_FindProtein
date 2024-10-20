@@ -34,5 +34,4 @@
 	</div>
 </div>
 
-<script src="/js/cart.js"></script>
 <%@ include file="../layout/footer.jsp"%>
