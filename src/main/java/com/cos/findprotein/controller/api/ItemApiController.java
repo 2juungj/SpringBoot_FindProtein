@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,13 @@ public class ItemApiController {
 	public ResponseDto<Integer> addItem(@RequestBody Item item, @AuthenticationPrincipal PrincipalDetail principal)
 			throws Exception {
 		itemService.상품등록(item, principal.getUser());
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+	}
+
+	// 상품 수정 (PUT)
+	@PutMapping("/admin/updateItem/{id}")
+	public ResponseDto<Integer> updateItem(@RequestBody Item item, @PathVariable int id) throws Exception {
+		itemService.상품수정(item, id);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
 

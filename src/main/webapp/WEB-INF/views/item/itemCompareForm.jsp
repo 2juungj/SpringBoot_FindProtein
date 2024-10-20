@@ -9,7 +9,8 @@
 		<h1 class="page-header">${item.name}</h1>
 		<input type="hidden" value="${item.id}" id="id">
 		<sec:authorize access="hasRole('ADMIN')">
-			<input type="button" value="상품 삭제" id="btn-delete">
+			<a href="/admin/updateItemForm/${item.id}" class="btn btn-default">수정</a>
+			<button id="btn-delete" class="btn btn-default">삭제</button>
 		</sec:authorize>
 		<br>
 	</div>

@@ -18,7 +18,7 @@ import com.cos.findprotein.service.ItemService;
 
 @Controller
 public class ItemController {
-	
+
 	@Autowired
 	private ItemService itemService;
 	@Autowired
@@ -30,6 +30,13 @@ public class ItemController {
 		return "admin/addItemForm";
 	}
 
+	// 상품 수정 페이지
+	@GetMapping("/admin/updateItemForm/{id}")
+	public String itemUpdateForm(@PathVariable int id, Model model) {
+		model.addAttribute("item", itemService.상품불러오기(id));
+		return "admin/updateItemForm";
+	}
+
 	// 상품 리스트 페이지
 	@GetMapping("/item/itemListForm")
 	public String itemListForm(Model model,
@@ -37,16 +44,15 @@ public class ItemController {
 		model.addAttribute("itemList", itemService.글목록(pageable));
 		return "item/itemListForm";
 	}
-	
+
 	// 상품 가격 비교 페이지
 	@GetMapping("/item/{id}") // 해당 id는 itemId
-	public String itemCompareForm(@PathVariable int id, Model model) {	//주소의 id 값을 파라미터로 받는다.
-		
+	public String itemCompareForm(@PathVariable int id, Model model) { // 주소의 id 값을 파라미터로 받는다.
+
 		List<NaverShopSearchItem> nssItemList = itemService.가격불러오기(id);
-		
+
 		Item item = itemRepository.findById(id).get(); // 상품명, 설명 등을 위해 필요
-		
-		
+
 		model.addAttribute("nssItemList", nssItemList);
 		model.addAttribute("item", item);
 		return "item/itemCompareForm"; // 상세보기 페이지 (가격 비교 페이지)

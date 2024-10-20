@@ -47,6 +47,9 @@ public class NaverShopSearchService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode rootNode = objectMapper.readTree(response.getBody());
 		JsonNode itemsNode = rootNode.path("items");
+		
+		// 기존의 NaverShopSearchItem 삭제
+        naverShopSearchItemRepository.deleteByItemId(item.getId());
 
 		// 각각의 아이템을 NaverShopSearchItem에 매핑
 		for (JsonNode itemNode : itemsNode) {
