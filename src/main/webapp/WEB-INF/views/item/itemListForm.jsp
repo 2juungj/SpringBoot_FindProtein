@@ -12,7 +12,6 @@
 					<div class="card h-100">
 						<!-- Product image-->
 						<div class="image-container" style="width: 100%; padding-top: 100%; position: relative;">
-							<!--이미지 경로는 네이버 쇼핑 검색 API 연동 후 설정 -->
 							<img class="card-img-top" src="${item.image}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" />
 						</div>
 						<!-- Product details-->
