@@ -2,46 +2,42 @@ package com.cos.findprotein.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.cos.findprotein.model.Item;
 import com.cos.findprotein.model.NaverShopSearchItem;
 import com.cos.findprotein.model.User;
 import com.cos.findprotein.repository.ItemRepository;
 import com.cos.findprotein.repository.NaverShopSearchItemRepository;
-import com.cos.findprotein.util.UrlEncoder;
 
 @Service
 public class ItemService {
 	
 	@Autowired
 	private ItemRepository itemRepository;
-	
 	@Autowired
 	private NaverShopSearchItemRepository naverShopSearchItemRepository;
+	@Autowired
+	private NaverShopSearchService naverShopSearchService;
 
 	
 	@Transactional
-	public void 상품등록(Item item, User user) {
-		// 상품명을 URL 인코딩해서 담는다.
-		String encName = UrlEncoder.encode(item.getName());
+	public void 상품등록(Item item, User user) throws Exception {
 		// 빌더를 사용하여 객체 생성
 		Item newItem = Item.builder()
 											.name(item.getName())
-											.encName(encName)
 											.info(item.getInfo())
 											.category(item.getCategory())
 											.user(user)
-											.image(item.getImage())
 											.build();
 
 		// 객체 저장
 		itemRepository.save(newItem);
+		// 해당 상품 최저가 상품들 저장 + newItem에 이미지 추가
+		naverShopSearchService.searchNaverShop(newItem);
 	}
 	
 	@Transactional(readOnly = true)
