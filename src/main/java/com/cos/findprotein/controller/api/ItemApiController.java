@@ -20,7 +20,7 @@ public class ItemApiController {
 
 	// 상품 등록 (POST)
 	@PostMapping("/admin/addItem")
-	public ResponseDto<Integer> addItem(@RequestBody Item item, @AuthenticationPrincipal PrincipalDetail principal) {
+	public ResponseDto<Integer> addItem(@RequestBody Item item, @AuthenticationPrincipal PrincipalDetail principal) throws Exception {
 		itemService.상품등록(item, principal.getUser());
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
