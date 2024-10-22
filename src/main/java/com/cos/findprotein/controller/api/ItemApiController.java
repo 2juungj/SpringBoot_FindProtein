@@ -36,6 +36,13 @@ public class ItemApiController {
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
 
+	// 상품 최저가 갱신 (DELETE, PUT)
+	@PutMapping("/admin/renewItem/{id}")
+	public ResponseDto<Integer> renewItem(@PathVariable int id) throws Exception {
+		itemService.상품최저가갱신(id);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+	}
+
 	// 상품 삭제 (DELETE)
 	@DeleteMapping("/admin/deleteItem/{id}")
 	public ResponseDto<Integer> deleteItem(@PathVariable int id) {

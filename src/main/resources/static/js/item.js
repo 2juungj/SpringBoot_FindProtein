@@ -6,6 +6,9 @@ let index = {
 		$("#btn-update").on("click", () => {
 			this.update();
 		});
+		$("#btn-renew").on("click", () => {
+			this.renew();
+		});
 		$("#btn-delete").on("click", () => {
 			this.deleteById();
 		});
@@ -59,6 +62,32 @@ let index = {
 			}
 			else {
 				alert("상품수정 완료");
+				location.href = "/item/" + id;
+			}
+
+		}).fail(function(error) {
+			alert(JSON.stringify(error));
+		});
+	},
+	
+	renew: function() {
+		let id = $("#id").val();
+		
+		let data = {
+		};
+
+		$.ajax({
+			type: "PUT",
+			url: "/admin/renewItem/" + id,
+			data: JSON.stringify(data),
+			contentType: "application/json; charset = utf-8",
+			dataType: "json"
+		}).done(function(resp) {
+			if (resp.status === 500) {
+				alert("상품최저가갱신 실패");
+			}
+			else {
+				alert("상품최저가갱신 완료");
 				location.href = "/item/" + id;
 			}
 

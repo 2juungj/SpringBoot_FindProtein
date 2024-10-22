@@ -52,6 +52,17 @@ public class ItemService {
 	}
 
 	@Transactional
+	public void 상품최저가갱신(int id) throws Exception {
+		// itemId로 해당 item을 불러온다.
+		Item item = itemRepository.findById(id).orElseThrow(() -> {
+			return new IllegalArgumentException("상품 불러오기 실패: 아이디를 찾을 수 없음.");
+		});
+
+		// 상품 최저가 갱신
+		naverShopSearchService.searchNaverShop(item);
+	}
+
+	@Transactional
 	public void 상품삭제(int id) {
 		itemRepository.deleteById(id);
 	}
@@ -77,7 +88,7 @@ public class ItemService {
 		}
 		return nssItemList;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public Item 상품불러오기(int id) {
 		return itemRepository.findById(id).orElseThrow(() -> {

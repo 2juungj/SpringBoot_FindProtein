@@ -12,6 +12,11 @@
 			<a href="/admin/updateItemForm/${item.id}" class="btn btn-default">수정</a>
 			<button id="btn-delete" class="btn btn-default">삭제</button>
 		</sec:authorize>
+		<c:if test="${not empty principal}">
+			<div>
+				<button id="btn-renew" class="btn btn-default">최저가 갱신</button>
+			</div>
+		</c:if>
 		<br>
 	</div>
 	<div class="row qnas" style="text-align: center;">
