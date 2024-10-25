@@ -7,6 +7,10 @@
 	<div class="col-md-12" style="text-align: center;">
 		<img alt="thumbnail" src="${nssItemList[0].image}" width="200" height="200">
 		<h1 class="page-header">${item.name}</h1>
+		<div style="color: #6e6e6e;">
+			<!-- 최신화 날짜와 시간 분까지만 출력 -->
+			<fmt:formatDate value="${item.updateTime}" pattern="yyyy년 MM월 dd일 HH:mm 최신화되었습니다." />
+		</div>
 		<input type="hidden" value="${item.id}" id="id">
 		<sec:authorize access="hasRole('ADMIN')">
 			<a href="/admin/updateItemForm/${item.id}" class="btn btn-default">수정</a>

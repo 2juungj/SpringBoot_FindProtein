@@ -6,6 +6,10 @@ import com.cos.findprotein.repository.ItemRepository;
 import com.cos.findprotein.repository.NaverShopSearchItemRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -70,6 +74,9 @@ public class NaverShopSearchService {
 			JsonNode firstItemNode = itemsNode.get(0); // 첫 번째 아이템
 			String firstImage = firstItemNode.path("image").asText(); // 첫 번째 이미지 URL
 			item.setImage(firstImage); // 해당 Item의 image에 이미지 URL 저장
+			
+			// 최저가 갱신 된 시간을 추가
+			item.setUpdateTime(new Date());
 			
 			// DB에 저장
 			itemRepository.save(item);
