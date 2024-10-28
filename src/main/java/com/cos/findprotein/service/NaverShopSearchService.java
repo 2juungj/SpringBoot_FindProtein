@@ -7,7 +7,6 @@ import com.cos.findprotein.repository.NaverShopSearchItemRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -26,6 +26,7 @@ public class NaverShopSearchService {
 	@Autowired
 	private ItemRepository itemRepository;
 
+	@Transactional
 	public void searchNaverShop(Item item) throws Exception {
 		// RestTemplate 생성
 		RestTemplate restTemplate = new RestTemplate();
