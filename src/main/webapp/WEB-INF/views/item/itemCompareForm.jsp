@@ -18,6 +18,7 @@
 		</sec:authorize>
 		<c:if test="${not empty principal}">
 			<div>
+				<button id="btn-addToWish" class="btn btn-default">위시리스트 추가★</button>
 				<button id="btn-renew" class="btn btn-default">최저가 갱신</button>
 			</div>
 		</c:if>
@@ -49,4 +50,5 @@
 </div>
 
 <script src="/js/item.js"></script>
+<script src="/js/wish.js"></script>
 <%@ include file="../layout/footer.jsp"%>

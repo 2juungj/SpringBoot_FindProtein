@@ -26,7 +26,7 @@ public class ItemController {
 
 	// 상품 등록 페이지
 	@GetMapping("/admin/addItemForm")
-	public String addItem(Item item) {
+	public String addItemForm(Item item) {
 		return "admin/addItemForm";
 	}
 

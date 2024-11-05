@@ -53,6 +53,9 @@ public class Item {
 	
 	@OneToMany(mappedBy = "item", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<NaverShopSearchItem> naverShopSearchItems = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "item", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<WishItem> wishItems = new ArrayList<>();
 
 	@Builder
 	public Item(String name, String info, Category category, User user, String image) {

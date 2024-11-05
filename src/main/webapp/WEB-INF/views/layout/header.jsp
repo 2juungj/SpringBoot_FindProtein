@@ -45,6 +45,7 @@
 						<li class="nav-item"><a class="nav-link" href="/user/updateForm">회원정보</a></li>
 						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 						<li class="nav-item"><a class="nav-link" href="/item/itemListForm">보충제 최저가</a></li>
+						<li class="nav-item"><a class="nav-link" href="/wish/wishListForm">위시리스트★</a></li>
 					</ul>
 				</c:otherwise>
 			</c:choose>
