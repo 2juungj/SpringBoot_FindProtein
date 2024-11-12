@@ -16,6 +16,8 @@ import com.cos.findprotein.config.oauth.provider.GoogleUserInfo;
 import com.cos.findprotein.config.oauth.provider.KakaoUserInfo;
 import com.cos.findprotein.config.oauth.provider.NaverUserInfo;
 import com.cos.findprotein.config.oauth.provider.OAuth2UserInfo;
+import com.cos.findprotein.model.EmailNotificationType;
+import com.cos.findprotein.model.NotificationType;
 import com.cos.findprotein.model.RoleType;
 import com.cos.findprotein.model.User;
 import com.cos.findprotein.repository.UserRepository;
@@ -73,6 +75,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
                             .password(password)
                             .email(email)
                             .role(RoleType.USER)
+                            .notification(NotificationType.NO)
+                            .emailNotification(EmailNotificationType.NO)
                             .oauth(oauth)
                             .oauthId(oauthId)
                             .build();

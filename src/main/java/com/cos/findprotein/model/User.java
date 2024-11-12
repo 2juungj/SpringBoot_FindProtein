@@ -44,6 +44,14 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private RoleType role; // Enum을 쓰는 게 좋다. // ADMIN, USER
 	
+	// 알림 설정
+	@Enumerated(EnumType.STRING)
+	private NotificationType notification; // YES, NO
+	
+	// 이메일 알림 설정
+	@Enumerated(EnumType.STRING)
+	private EmailNotificationType emailNotification; // YES, NO
+	
 	private String oauth; // kakao, google
 	private String oauthId;
 	
@@ -51,12 +59,14 @@ public class User {
 	private Timestamp createDate; // 가입한 시간
 
 	@Builder
-	public User(String username, String password, String email, RoleType role, String oauth, String oauthId,
+	public User(String username, String password, String email, RoleType role, NotificationType notificationType, EmailNotificationType emailNotificationType, String oauth, String oauthId,
 			Timestamp createDate) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.role = role;
+		this.notification = notificationType;
+		this.emailNotification = emailNotificationType;
 		this.oauth = oauth;
 		this.oauthId = oauthId;
 		this.createDate = createDate;

@@ -13,7 +13,6 @@ import com.cos.findprotein.dto.ResponseDto;
 import com.cos.findprotein.model.User;
 import com.cos.findprotein.service.UserService;
 
-
 @RestController
 public class UserApiController {
 
@@ -27,12 +26,24 @@ public class UserApiController {
 		userService.회원가입(user);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1); // 자바오브젝트를 json으로 변환해서 리턴 (Jackson)
 	}
-	
+
 	@PutMapping("/user")
-	public ResponseDto<Integer> update(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principal){
-		userService.회원수정(user,principal);
+	public ResponseDto<Integer> update(@RequestBody User user, @AuthenticationPrincipal PrincipalDetail principal) {
+		userService.회원수정(user, principal);
 		// 여기서 트랜잭션이 종료되기 때문에 DB의 값은 변경됐다.
 		// 그러나 세션의 값은 변경되지 않은 상태이기 때문에 직접 세션 값을 변경해준다.
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+	}
+
+	@PutMapping("/user/notification")
+	public ResponseDto<Integer> notification(@AuthenticationPrincipal PrincipalDetail principal) {
+		userService.알림설정변경(principal);
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+	}
+	
+	@PutMapping("/user/emailNotification")
+	public ResponseDto<Integer> emailNotification(@AuthenticationPrincipal PrincipalDetail principal) {
+		userService.이메일알림설정변경(principal);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
 }
