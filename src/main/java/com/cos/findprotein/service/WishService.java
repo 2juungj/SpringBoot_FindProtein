@@ -51,9 +51,9 @@ public class WishService {
 
 	    // WishItem이 존재하지 않을 경우 생성
 	    WishItem newWishItem = WishItem.builder().wish(wish).item(item).build();
-	    wish.setCount(wishItemRepository.countByWishId(wish.getId()) + 1); // 위시리스트의 상품 수 증가
-	    wishRepository.save(wish); // 위시 리스트 업데이트
 	    wishItemRepository.save(newWishItem); // 새로운 WishItem 저장
+	    wish.setCount(wishItemRepository.countByWishId(wish.getId())); // 위시리스트의 상품 수 증가
+	    wishRepository.save(wish); // 위시 리스트 업데이트
 
 	    System.out.println("상품이 위시리스트에 추가되었습니다.");
 	}
