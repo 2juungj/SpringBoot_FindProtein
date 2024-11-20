@@ -30,8 +30,8 @@ public class UserController {
 		
 	@GetMapping("/user/updateForm")
 	public String updateForm(Model model, @AuthenticationPrincipal PrincipalDetail principal) {
-		model.addAttribute("notification", principal.getUser().getNotification().name());
-		model.addAttribute("emailNotification", principal.getUser().getEmailNotification().name());
+		model.addAttribute("notificationType", principal.getUser().getNotificationType().name());
+		model.addAttribute("emailNotificationType", principal.getUser().getEmailNotificationType().name());
 		return "user/updateForm";
 	}
 }

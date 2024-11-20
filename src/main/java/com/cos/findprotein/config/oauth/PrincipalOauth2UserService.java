@@ -75,8 +75,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
                             .password(password)
                             .email(email)
                             .role(RoleType.USER)
-                            .notification(NotificationType.NO)
-                            .emailNotification(EmailNotificationType.NO)
+                            .notificationType(NotificationType.NO)
+                            .emailNotificationType(EmailNotificationType.NO)
                             .oauth(oauth)
                             .oauthId(oauthId)
                             .build();

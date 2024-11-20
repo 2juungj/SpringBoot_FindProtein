@@ -23,11 +23,11 @@
 	</form>
 
 	<div>
-		<label for="Notification">알림 설정 (동의 상태가 되면 위시리스트 상품의 최저가 알림을 받습니다.)</label>
+		<label for="NotificationType">알림 설정 (동의 상태가 되면 위시리스트 상품의 최저가 알림을 받습니다.)</label>
 	</div>
 	<div>
 		<c:choose>
-			<c:when test="${notification == 'NO'}">
+			<c:when test="${notificationType == 'NO'}">
 				<button id="btn-notification" class="btn btn-danger">비동의</button>
 			</c:when>
 			<c:otherwise>
@@ -37,11 +37,11 @@
 	</div>
 	<br>
 	<div>
-		<label for="EmailNotification">이메일 알림 설정 (동의 상태가 되면 위시리스트 상품의 최저가 알림을 이메일로 받습니다.)</label>
+		<label for="EmailNotificationType">이메일 알림 설정 (동의 상태가 되면 위시리스트 상품의 최저가 알림을 이메일로 받습니다.)</label>
 	</div>
 	<div>
 		<c:choose>
-			<c:when test="${emailNotification == 'NO'}">
+			<c:when test="${emailNotificationType == 'NO'}">
 				<button id="btn-emailNotification" class="btn btn-danger">비동의</button>
 			</c:when>
 			<c:otherwise>

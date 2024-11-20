@@ -46,17 +46,18 @@ public class User {
 	
 	// 알림 설정
 	@Enumerated(EnumType.STRING)
-	private NotificationType notification; // YES, NO
+	private NotificationType notificationType; // YES, NO
 	
 	// 이메일 알림 설정
 	@Enumerated(EnumType.STRING)
-	private EmailNotificationType emailNotification; // YES, NO
+	private EmailNotificationType emailNotificationType; // YES, NO
 	
 	private String oauth; // kakao, google
 	private String oauthId;
 	
 	@CreationTimestamp // 시간이 자동 입력
 	private Timestamp createDate; // 가입한 시간
+
 
 	@Builder
 	public User(String username, String password, String email, RoleType role, NotificationType notificationType, EmailNotificationType emailNotificationType, String oauth, String oauthId,
@@ -65,8 +66,8 @@ public class User {
 		this.password = password;
 		this.email = email;
 		this.role = role;
-		this.notification = notificationType;
-		this.emailNotification = emailNotificationType;
+		this.notificationType = notificationType;
+		this.emailNotificationType = emailNotificationType;
 		this.oauth = oauth;
 		this.oauthId = oauthId;
 		this.createDate = createDate;

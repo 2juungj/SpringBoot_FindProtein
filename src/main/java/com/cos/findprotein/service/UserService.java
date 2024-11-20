@@ -36,8 +36,8 @@ public class UserService {
 		String encPassword = encoder.encode(rawPassword); // 해시
 		user.setPassword(encPassword); // 비밀번호를 해시 값으로 변경
 		user.setRole(RoleType.USER);
-		user.setNotification(NotificationType.NO);
-		user.setEmailNotification(EmailNotificationType.NO);
+		user.setNotificationType(NotificationType.NO);
+		user.setEmailNotificationType(EmailNotificationType.NO);
 		userRepository.save(user);
 	}
 
@@ -70,10 +70,10 @@ public class UserService {
 	    });
 
 	    // notification 값 변경
-	    if (user.getNotification() == NotificationType.YES) {
-	        user.setNotification(NotificationType.NO);
-	    } else if (user.getNotification() == NotificationType.NO) {
-	        user.setNotification(NotificationType.YES);
+	    if (user.getNotificationType() == NotificationType.YES) {
+	        user.setNotificationType(NotificationType.NO);
+	    } else if (user.getNotificationType() == NotificationType.NO) {
+	        user.setNotificationType(NotificationType.YES);
 	    } else {
 	    	throw new IllegalStateException("유효하지 않은 notification 값입니다.");
 	    }
@@ -91,10 +91,10 @@ public class UserService {
 	    });
 
 	    // emailNotification 값 변경
-	    if (user.getEmailNotification() == EmailNotificationType.YES) {
-	        user.setEmailNotification(EmailNotificationType.NO);
-	    } else if (user.getEmailNotification() == EmailNotificationType.NO) {
-	        user.setEmailNotification(EmailNotificationType.YES);
+	    if (user.getEmailNotificationType() == EmailNotificationType.YES) {
+	        user.setEmailNotificationType(EmailNotificationType.NO);
+	    } else if (user.getEmailNotificationType() == EmailNotificationType.NO) {
+	        user.setEmailNotificationType(EmailNotificationType.YES);
 	    } else {
 	    	throw new IllegalStateException("유효하지 않은 emailNotification 값입니다.");
 	    }
