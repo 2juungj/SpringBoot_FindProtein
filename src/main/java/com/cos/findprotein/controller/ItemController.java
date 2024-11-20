@@ -49,7 +49,7 @@ public class ItemController {
 	@GetMapping("/item/{id}") // 해당 id는 itemId
 	public String itemCompareForm(@PathVariable int id, Model model) { // 주소의 id 값을 파라미터로 받는다.
 
-		List<NaverShopSearchItem> nssItemList = itemService.가격불러오기(id);
+		List<NaverShopSearchItem> nssItemList = itemService.최저가상품불러오기(id);
 
 		Item item = itemRepository.findById(id).get(); // 상품명, 설명 등을 위해 필요
 

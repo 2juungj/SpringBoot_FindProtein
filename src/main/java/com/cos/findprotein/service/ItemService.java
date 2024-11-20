@@ -57,7 +57,7 @@ public class ItemService {
 		Item item = itemRepository.findById(id).orElseThrow(() -> {
 			return new IllegalArgumentException("상품 불러오기 실패: 아이디를 찾을 수 없음.");
 		});
-
+		
 		// 상품 최저가 갱신
 		naverShopSearchService.searchNaverShop(item);
 	}
@@ -73,7 +73,7 @@ public class ItemService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<NaverShopSearchItem> 가격불러오기(int id) {
+	public List<NaverShopSearchItem> 최저가상품불러오기(int id) {
 
 		List<NaverShopSearchItem> nssItemList = new ArrayList<>(); // itemId와 일치하는 NaverShopSearchItem들을 담을 리스트
 
