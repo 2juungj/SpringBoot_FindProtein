@@ -20,10 +20,15 @@ public class PriceUpdateSchedulerService {
 	// 1시간마다 최저가 갱신 작업 실행
 	@Scheduled(fixedRate = 3600000) // 1시간 = 3600000 밀리초
 	public void updateLowestPrice() {
-		System.out.println("최저가 갱신 중...");
+		System.out.println("최저가 갱신을 시작합니다.");
 
 		// 모든 Item 불러오기
 		List<Item> items = itemRepository.findAll();
+		
+		if (items.isEmpty()) {
+			System.out.println("상품이 존재하지 않으므로 최저가를 갱신하지 않았습니다.");
+			return; // 작업 종료
+		}
 
 		// 각 Item의 최저가 갱신
 		for (Item item : items) {
