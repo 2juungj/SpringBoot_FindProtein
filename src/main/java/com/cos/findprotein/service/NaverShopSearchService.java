@@ -25,9 +25,17 @@ public class NaverShopSearchService {
 	private NaverShopSearchItemRepository naverShopSearchItemRepository;
 	@Autowired
 	private ItemRepository itemRepository;
+	@Autowired
+	private NotificationService notificationService;
 
 	@Transactional
 	public void searchNaverShop(Item item) throws Exception {
+
+		// 기존 상품 최저가 호출 (최저가 알림 서비스에 사용)
+		int oldLowestPrice = naverShopSearchItemRepository.findFirstByItemId(item.getId())
+				.map(existingItem -> existingItem.getPrice()) // 최저가를 가져옴
+				.orElse(0); // 없으면 기본값 0을 설정 (신규 등록 상품엔 기존 최저가가 없다.)
+
 		// RestTemplate 생성
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -52,9 +60,9 @@ public class NaverShopSearchService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode rootNode = objectMapper.readTree(response.getBody());
 		JsonNode itemsNode = rootNode.path("items");
-		
+
 		// 기존의 NaverShopSearchItem 삭제
-        naverShopSearchItemRepository.deleteByItemId(item.getId());
+		naverShopSearchItemRepository.deleteByItemId(item.getId());
 
 		// 각각의 아이템을 NaverShopSearchItem에 매핑
 		for (JsonNode itemNode : itemsNode) {
@@ -73,12 +81,16 @@ public class NaverShopSearchService {
 		// 리스트의 첫번째 이미지를 해당 상품의 이미지 변수에 담는다.
 		if (itemsNode.isArray() && itemsNode.size() > 0) {
 			JsonNode firstItemNode = itemsNode.get(0); // 첫 번째 아이템
+			int newLowestPrice = firstItemNode.path("lprice").asInt(); // 상품의 새로운 최저가 (최저가 알림에 사용)
 			String firstImage = firstItemNode.path("image").asText(); // 첫 번째 이미지 URL
 			item.setImage(firstImage); // 해당 Item의 image에 이미지 URL 저장
-			
+
+			// 최저가 알림 서비스
+			notificationService.최저가알림발송(item, oldLowestPrice, newLowestPrice);
+
 			// 최저가 갱신 된 시간을 추가
 			item.setUpdateTime(new Date());
-			
+
 			// DB에 저장
 			itemRepository.save(item);
 		}
