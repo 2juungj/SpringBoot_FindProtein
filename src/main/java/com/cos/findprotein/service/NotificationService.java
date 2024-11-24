@@ -20,7 +20,6 @@ import com.cos.findprotein.repository.NotificationsRepository;
 import com.cos.findprotein.repository.UserRepository;
 import com.cos.findprotein.repository.WishItemRepository;
 
-
 @Service
 public class NotificationService {
 
@@ -32,7 +31,6 @@ public class NotificationService {
 	private NotificationsRepository notificationsRepository;
 	@Autowired
 	private WishItemRepository wishItemRepository;
-
 
 	@Transactional
 	public void 최저가알림발송(Item item, int oldLowestPrice, int newLowestPrice) {
@@ -72,12 +70,13 @@ public class NotificationService {
 
 			String content = "위시리스트에 등록된 " + userWishItem.getItem().getName() + "의 최저가 " + newLowestPrice
 					+ "원이  등록되었습니다."; // 알림 내용
-			
+
 			String link = "http://localhost:8000/item/" + item.getId();
 
-			Notifications notifications = Notifications.builder().notification(notification).content(content).link(link).build(); // builder로
-																														// notifications
-																														// 생성
+			Notifications notifications = Notifications.builder().notification(notification).content(content).link(link)
+					.build(); // builder로
+			// notifications
+			// 생성
 
 			notificationsRepository.save(notifications); // 생성된 알림 저장
 
@@ -92,7 +91,7 @@ public class NotificationService {
 	public Notification 알림불러오기(PrincipalDetail principal) {
 		Notification userNotification = notificationRepository.findByUserId(principal.getUser().getId())
 				.orElseThrow(() -> {
-					return new IllegalArgumentException("알림 불러오기 실패: 아이디를 찾을 수 없음.");
+					return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
 				});
 
 		return userNotification;
@@ -118,6 +117,38 @@ public class NotificationService {
 		Collections.reverse(userNotificationsList);
 
 		return userNotificationsList;
+	}
+
+	// 하나의 알림 삭제
+	@Transactional
+	public void 알림삭제(int id, PrincipalDetail principal) {
+		notificationsRepository.deleteById(id);
+		
+		Notification notification = notificationRepository.findByUserId(principal.getUser().getId()).orElseThrow(() -> {
+			return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
+		});
+	
+		notification.setCount(notification.getCount() - 1); // Notification에 담긴 Notifications의 총 개수 감소
+
+		notificationRepository.save(notification);
+	}
+	
+	// 모든 알림 삭제
+	@Transactional
+	public void 모든알림삭제(PrincipalDetail principal) {
+	    // 현재 사용자의 Notification을 가져옴
+	    Notification notification = notificationRepository.findByUserId(principal.getUser().getId()).orElseThrow(() -> {
+	        return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
+	    });
+
+	    // Notification과 연관된 모든 Notifications 삭제
+	    notificationsRepository.deleteByNotificationId(notification.getId());
+
+	    // Notification의 알림 개수 초기화
+	    notification.setCount(0);
+
+	    // 변경된 Notification 저장
+	    notificationRepository.save(notification);
 	}
 
 }
