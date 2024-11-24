@@ -1,6 +1,9 @@
+<%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 
 
 <sec:authorize access="isAuthenticated()">
@@ -25,6 +28,32 @@
 <body>
 	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
 		<a class="navbar-brand" href="/">홈</a>
+		<c:choose>
+			<c:when test="${not empty principal}">
+					<div style="position: relative; margin-right: 5px; cursor: pointer;">
+						<!-- 종모양 아이콘 -->
+						<i class="bi bi-bell" style="font-size: 24px; color: white;" id="notificationBell" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+						<!-- 알림 개수 표시 -->
+						<span
+							style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; font-size: 11px; padding: 1px 3px; border-radius: 50%; 
+        ${sessionScope.notification.count > 0 ? 'display: inline-block;' : 'display: none;'}">
+							${sessionScope.notification.count} </span>
+						<!-- 플로팅 알림 리스트 -->
+						<div class="dropdown-menu" aria-labelledby="notificationBell" style="width: 780px; max-height: 400px; overflow-y: auto; right: 0;">
+							<c:choose>
+								<c:when test="${not empty sessionScope.notificationsList}">
+									<c:forEach var="notifications" items="${sessionScope.notificationsList}">
+										<a class="dropdown-item" href="${notifications.link}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-top: 10px; padding-bottom: 10px;"> ${notifications.content} </a>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<span class="dropdown-item text-muted">알림이 없습니다.</span>
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
+			</c:when>
+		</c:choose>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -51,3 +80,4 @@
 			</c:choose>
 		</div>
 	</nav>
+	

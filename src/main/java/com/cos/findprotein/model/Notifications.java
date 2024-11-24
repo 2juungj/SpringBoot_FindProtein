@@ -28,11 +28,14 @@ public class Notifications {
 	private Notification notification;
 	
 	private String content; // 알림 내용
+	
+	private String link; // 최저가 비교 페이지 링크
 
 	@Builder
-	public Notifications(Notification notification, String content) {
+	public Notifications(Notification notification, String content, String link) {
 		this.notification = notification;
 		this.content = content;
+		this.link = link;
 	}
 
 }
