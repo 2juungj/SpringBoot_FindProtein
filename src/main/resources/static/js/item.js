@@ -78,7 +78,7 @@ let index = {
 
 		$.ajax({
 			type: "PUT",
-			url: "/admin/renewItem/" + id,
+			url: "/item/renewItem/" + id,
 			data: JSON.stringify(data),
 			contentType: "application/json; charset = utf-8",
 			dataType: "json"

@@ -37,7 +37,7 @@ public class ItemApiController {
 	}
 
 	// 상품 최저가 갱신 (DELETE, PUT)
-	@PutMapping("/admin/renewItem/{id}")
+	@PutMapping("/item/renewItem/{id}")
 	public ResponseDto<Integer> renewItem(@PathVariable int id) throws Exception {
 		itemService.상품최저가갱신(id);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
