@@ -85,14 +85,14 @@ public class NaverShopSearchService {
 			String firstImage = firstItemNode.path("image").asText(); // 첫 번째 이미지 URL
 			item.setImage(firstImage); // 해당 Item의 image에 이미지 URL 저장
 
-			// 최저가 알림 서비스
-			notificationService.최저가알림발송(item, oldLowestPrice, newLowestPrice);
-
 			// 최저가 갱신 된 시간을 추가
 			item.setUpdateTime(new Date());
 
 			// DB에 저장
 			itemRepository.save(item);
+
+			// 최저가 알림 서비스
+			notificationService.최저가알림발송(item, oldLowestPrice, newLowestPrice);
 		}
 	}
 }
