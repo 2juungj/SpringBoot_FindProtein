@@ -2,9 +2,12 @@ package com.cos.findprotein.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +17,15 @@ import com.cos.findprotein.model.Notification;
 import com.cos.findprotein.model.NotificationType;
 import com.cos.findprotein.model.Notifications;
 import com.cos.findprotein.model.User;
+import com.cos.findprotein.model.Wish;
 import com.cos.findprotein.model.WishItem;
 import com.cos.findprotein.repository.NotificationRepository;
 import com.cos.findprotein.repository.NotificationsRepository;
 import com.cos.findprotein.repository.UserRepository;
 import com.cos.findprotein.repository.WishItemRepository;
+import com.cos.findprotein.repository.WishRepository;
+
+import jakarta.mail.MessagingException;
 
 @Service
 public class NotificationService {
@@ -31,9 +38,14 @@ public class NotificationService {
 	private NotificationsRepository notificationsRepository;
 	@Autowired
 	private WishItemRepository wishItemRepository;
+	@Autowired
+	private WishRepository wishRepository;
+	@Autowired
+	private JavaMailSender javaMailSender;
 
+	// 신규 최저가가 더 저렴하면 알림과 이메일을 발송
 	@Transactional
-	public void 최저가알림발송(Item item, int oldLowestPrice, int newLowestPrice) {
+	public void 최저가알림발송(Item item, int oldLowestPrice, int newLowestPrice) throws MessagingException {
 
 		// 신규 최저가가 더 저렴한지 확인
 		if (oldLowestPrice <= newLowestPrice) {
@@ -44,39 +56,48 @@ public class NotificationService {
 
 		List<User> users = userRepository.findAll(); // 모든 유저를 불러온다.
 
-		List<User> agreeUsers = new ArrayList<>(); // NotificationType이 YES인 user를 담을 리스트
+		List<User> notificationAgreeUsers = new ArrayList<>(); // NotificationType이 YES인 user를 담을 리스트
 
-		// NotificationType이 YES인 user를 agreeUsers에 담는다.
+		List<User> emailAgreeUsers = new ArrayList<>(); // EmailNotificationType이 YES인 user를 담을 리스트
+
+		// NotificationType이 YES인 user를 notificationAgreeUsers에 담는다.
 		for (User user : users) {
 			if (user.getNotificationType() == NotificationType.YES) {
 				System.out.println("ID: " + user.getId() + " NotificationType: " + user.getNotificationType());
-				agreeUsers.add(user);
+				notificationAgreeUsers.add(user);
 			}
 		}
 
 		// 필터링된 유저에 대한 작업
-		for (User user : agreeUsers) {
-			// builder에 사용 될 notification를 찾고 없다면 생성
+		for (User user : notificationAgreeUsers) {
+			// builder에 사용될 notification를 찾고 없다면 생성
 			Notification notification = notificationRepository.findByUserId(user.getId()).orElseGet(() -> {
 				System.out.println("id: " + user.getId() + " 유저의 notification을 생성합니다.");
 				Notification newNotification = Notification.builder().user(user).count(0).build();
 				return notificationRepository.save(newNotification);
 			});
 
-			WishItem userWishItem = wishItemRepository.findByWishIdAndItemId(user.getId(), item.getId())
-					.orElseThrow(() -> {
-						return new IllegalArgumentException("위시상품 불러오기 실패: 아이디를 찾을 수 없음.");
-					});
+			Wish wish = wishRepository.findByUserId(user.getId()).orElse(null);
+			if (wish == null) {
+				System.out.println("위시 불러오기 실패: 유저 ID " + user.getId());
+				continue; // wish가 null이면 다음 사용자로 넘어감
+			}
+
+			WishItem userWishItem = wishItemRepository.findByWishIdAndItemId(wish.getId(), item.getId()).orElse(null);
+			if (userWishItem == null) {
+				System.out.println("위시상품 불러오기 실패: 위시 ID " + wish.getId() + ", 상품 ID " + item.getId());
+				continue; // userWishItem이 null이면 다음 사용자로 넘어감
+			}
+
+			Date createTime = new Date();
 
 			String content = "위시리스트에 등록된 " + userWishItem.getItem().getName() + "의 최저가 " + newLowestPrice
-					+ "원이  등록되었습니다."; // 알림 내용
+					+ "원이 등록되었습니다."; // 알림 내용
 
 			String link = "http://localhost:8000/item/" + item.getId();
 
 			Notifications notifications = Notifications.builder().notification(notification).content(content).link(link)
-					.build(); // builder로
-			// notifications
-			// 생성
+					.createTime(createTime).build();
 
 			notificationsRepository.save(notifications); // 생성된 알림 저장
 
@@ -85,13 +106,61 @@ public class NotificationService {
 
 			notificationRepository.save(notification);
 		}
+
+		// EmailNotificationType이 YES인 user를 emailAgreeUsers에 담는다.
+		for (User user : users) {
+			if (user.getNotificationType() == NotificationType.YES) {
+				System.out
+						.println("ID: " + user.getId() + " EmailNotificationType: " + user.getEmailNotificationType());
+				emailAgreeUsers.add(user);
+			}
+		}
+
+		// 이메일 알림 발송
+		for (User user : emailAgreeUsers) {
+			Wish wish = wishRepository.findByUserId(user.getId()).orElse(null);
+			if (wish == null) {
+				System.out.println("위시 불러오기 실패: 유저 ID " + user.getId());
+				continue; // wish가 null이면 다음 사용자로 넘어감
+			}
+
+			WishItem userWishItem = wishItemRepository.findByWishIdAndItemId(wish.getId(), item.getId()).orElse(null);
+			if (userWishItem == null) {
+				System.out.println("위시상품 불러오기 실패: 위시 ID " + wish.getId() + ", 상품 ID " + item.getId());
+				continue; // userWishItem이 null이면 다음 사용자로 넘어감
+			}
+
+			String subject = "[득근득근] 위시리스트에 등록된 상품 " + item.getName() + "이 더 저렴해졌어요!";
+			String username = user.getUsername();
+			String userEmail = user.getEmail();
+			String itemName = item.getName();
+			int lowestPrice = newLowestPrice;
+			String link = "http://localhost:8000/item/" + item.getId();
+
+			// 이메일 본문 내용
+			String message = "안녕하세요, " + username + "님!\n\n" + "위시리스트에 등록된 상품 '" + itemName + "' 의 최저가 " + lowestPrice
+					+ "원이 등록되었습니다.\n\n" + "자세한 내용을 확인하려면 아래 링크를 클릭해주세요:\n" + link;
+
+			// 이메일 발송
+			SimpleMailMessage email = new SimpleMailMessage();
+			email.setTo(userEmail);
+			email.setSubject(subject);
+			email.setText(message);
+			email.setFrom("dgdg@gmail.com"); // 발신 이메일 설정
+
+			// 이메일 전송
+			javaMailSender.send(email);
+			System.out.println("이메일 발송 완료: " + userEmail);
+		}
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public Notification 알림불러오기(PrincipalDetail principal) {
 		Notification userNotification = notificationRepository.findByUserId(principal.getUser().getId())
-				.orElseThrow(() -> {
-					return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
+				.orElseGet(() -> {
+					System.out.println("id: " + principal.getUser().getId() + " 유저의 notification을 생성합니다.");
+					Notification newNotification = Notification.builder().user(principal.getUser()).count(0).build();
+					return notificationRepository.save(newNotification);
 				});
 
 		return userNotification;
@@ -123,32 +192,32 @@ public class NotificationService {
 	@Transactional
 	public void 알림삭제(int id, PrincipalDetail principal) {
 		notificationsRepository.deleteById(id);
-		
+
 		Notification notification = notificationRepository.findByUserId(principal.getUser().getId()).orElseThrow(() -> {
 			return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
 		});
-	
+
 		notification.setCount(notification.getCount() - 1); // Notification에 담긴 Notifications의 총 개수 감소
 
 		notificationRepository.save(notification);
 	}
-	
+
 	// 모든 알림 삭제
 	@Transactional
 	public void 모든알림삭제(PrincipalDetail principal) {
-	    // 현재 사용자의 Notification을 가져옴
-	    Notification notification = notificationRepository.findByUserId(principal.getUser().getId()).orElseThrow(() -> {
-	        return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
-	    });
+		// 현재 사용자의 Notification을 가져옴
+		Notification notification = notificationRepository.findByUserId(principal.getUser().getId()).orElseThrow(() -> {
+			return new IllegalArgumentException("Notification 불러오기 실패: 아이디를 찾을 수 없음.");
+		});
 
-	    // Notification과 연관된 모든 Notifications 삭제
-	    notificationsRepository.deleteByNotificationId(notification.getId());
+		// Notification과 연관된 모든 Notifications 삭제
+		notificationsRepository.deleteByNotificationId(notification.getId());
 
-	    // Notification의 알림 개수 초기화
-	    notification.setCount(0);
+		// Notification의 알림 개수 초기화
+		notification.setCount(0);
 
-	    // 변경된 Notification 저장
-	    notificationRepository.save(notification);
+		// 변경된 Notification 저장
+		notificationRepository.save(notification);
 	}
 
 }
