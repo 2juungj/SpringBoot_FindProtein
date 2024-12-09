@@ -26,8 +26,8 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
-		<a class="navbar-brand" href="/">홈</a>
+	<nav class="navbar navbar-expand-md" style="background-color: #964444;">
+		<a class="navbar-brand" href="/" style="color: white !important;">홈</a>
 		<c:choose>
 			<c:when test="${not empty principal}">
 				<div style="position: relative; margin-right: 5px; cursor: pointer;">
@@ -36,48 +36,48 @@
 					<!-- 알림 개수 표시 -->
 					<span
 						style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; font-size: 11px; padding: 1px 3px; border-radius: 50%; 
-        ${sessionScope.notification.count > 0 ? 'display: inline-block;' : 'display: none;'}">
+                    ${sessionScope.notification.count > 0 ? 'display: inline-block;' : 'display: none;'}">
 						${sessionScope.notification.count} </span>
 					<!-- 플로팅 알림 리스트 -->
 					<div class="dropdown-menu" aria-labelledby="notificationBell" style="width: 780px; max-height: 400px; overflow-y: auto; right: 0;">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="모두 삭제" id="btn-deleteAllNotifications">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="모두 삭제" id="btn-deleteAllNotifications"">
 						<c:choose>
 							<c:when test="${not empty sessionScope.notificationsList}">
 								<c:forEach var="notifications" items="${sessionScope.notificationsList}">
 									<a class="dropdown-item" href="${notifications.link}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-top: 10px; padding-bottom: 10px;">
-										${notifications.content} <input type="button" value="X" id="btn-deleteNotifications"  data-id="${notifications.id}">
+										${notifications.content} <input type="button" value="X" id="btn-deleteNotifications" data-id="${notifications.id}">
 									</a>
 								</c:forEach>
 							</c:when>
 							<c:otherwise>
-								<span class="dropdown-item text-muted">알림이 없습니다.</span>
+								<span class="dropdown-item text-muted" >알림이 없습니다.</span>
 							</c:otherwise>
 						</c:choose>
 					</div>
 				</div>
 			</c:when>
 		</c:choose>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" style="background-color: black; color: white !important;">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="collapsibleNavbar">
 			<c:choose>
 				<c:when test="${empty principal }">
 					<ul class="navbar-nav">
-						<li class="nav-item"><a class="nav-link" href="/auth/loginForm">로그인</a></li>
-						<li class="nav-item"><a class="nav-link" href="/auth/joinForm">회원가입</a></li>
-						<li class="nav-item"><a class="nav-link" href="/item/itemListForm">보충제 최저가</a></li>
+						<li class="nav-item"><a class="nav-link" href="/auth/loginForm" style="color: white !important;">로그인</a></li>
+						<li class="nav-item"><a class="nav-link" href="/auth/joinForm" style="color: white !important;">회원가입</a></li>
+						<li class="nav-item"><a class="nav-link" href="/item/itemListForm" style="color: white !important;">보충제 최저가</a></li>
 					</ul>
 				</c:when>
 				<c:otherwise>
 					<ul class="navbar-nav">
 						<sec:authorize access="hasRole('ADMIN')">
-							<li class="nav-item"><a class="nav-link" href="/admin/addItemForm">상품등록</a></li>
+							<li class="nav-item"><a class="nav-link" href="/admin/addItemForm" style="color: white !important;">상품등록</a></li>
 						</sec:authorize>
-						<li class="nav-item"><a class="nav-link" href="/user/updateForm">회원정보</a></li>
-						<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
-						<li class="nav-item"><a class="nav-link" href="/item/itemListForm">보충제 최저가</a></li>
-						<li class="nav-item"><a class="nav-link" href="/wish/wishListForm">위시리스트★</a></li>
+						<li class="nav-item"><a class="nav-link" href="/user/updateForm" style="color: white !important;">회원정보</a></li>
+						<li class="nav-item"><a class="nav-link" href="/logout" style="color: white !important;">로그아웃</a></li>
+						<li class="nav-item"><a class="nav-link" href="/item/itemListForm" style="color: white !important;">보충제 최저가</a></li>
+						<li class="nav-item"><a class="nav-link" href="/wish/wishListForm" style="color: white !important;">위시리스트★</a></li>
 					</ul>
 				</c:otherwise>
 			</c:choose>
