@@ -16,6 +16,7 @@ import com.cos.findprotein.config.auth.PrincipalDetail;
 import com.cos.findprotein.model.Notification;
 import com.cos.findprotein.model.Notifications;
 import com.cos.findprotein.service.BoardService;
+import com.cos.findprotein.service.ItemService;
 import com.cos.findprotein.service.NotificationService;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,11 +29,13 @@ public class BoardController {
 	@Autowired
 	private NotificationService notificationService;
 	@Autowired
+	private ItemService itemService;
+	@Autowired
 	private HttpSession session;
 
 	@GetMapping({ "", "/" })
 	public String index(Model model,
-			@PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+			@PageableDefault(size = 8, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
 			@AuthenticationPrincipal PrincipalDetail principal) {
 		Notification userNotification = null;
 		// 로그인 여부 확인
@@ -44,7 +47,7 @@ public class BoardController {
 			session.setAttribute("notificationsList", notificationsList);
 		}
 
-		model.addAttribute("boards", boardService.글목록(pageable));
+		model.addAttribute("itemList", itemService.글목록(pageable));
 		return "index"; // viewResolver 작동
 	}
 
