@@ -50,6 +50,12 @@ public class BoardController {
 		model.addAttribute("itemList", itemService.글목록(pageable));
 		return "index"; // viewResolver 작동
 	}
+	
+	@GetMapping("/board/boardListForm")
+	public String boardListForm(@PageableDefault(size = 8, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Model model) {
+		model.addAttribute("boardList", boardService.글목록(pageable));
+		return "board/boardListForm";
+	}
 
 	@GetMapping("/board/{id}")
 	public String findById(@PathVariable int id, Model model) {

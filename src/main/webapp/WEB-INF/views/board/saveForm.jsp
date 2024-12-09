@@ -2,11 +2,12 @@
 
 <%@ include file="../layout/header.jsp"%>
 
+<br>
 <div class="container">
 
 	<form>
 		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Enter title" id="title">
+			<input type="text" class="form-control" placeholder="요청하실 상품명을 기재해주세요." id="title">
 		</div>
 
 		<div class="form-group">

@@ -78,6 +78,7 @@
 						<li class="nav-item"><a class="nav-link" href="/logout" style="color: white !important;">로그아웃</a></li>
 						<li class="nav-item"><a class="nav-link" href="/item/itemListForm" style="color: white !important;">보충제 최저가</a></li>
 						<li class="nav-item"><a class="nav-link" href="/wish/wishListForm" style="color: white !important;">위시리스트★</a></li>
+						<li class="nav-item"><a class="nav-link" href="/board/boardListForm" style="color: white !important;">상품신청</a></li>
 					</ul>
 				</c:otherwise>
 			</c:choose>
