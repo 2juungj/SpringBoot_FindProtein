@@ -37,7 +37,6 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(
 				auth -> auth.requestMatchers("/","/auth/**", "/WEB-INF/**","js/**","/css/**","image/**","/dummy/**","/item/**")
 				.permitAll()
-				.requestMatchers(RegexRequestMatcher.regexMatcher("/board/\\d+")).permitAll()
 				.requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 기능
 				.anyRequest()
 				.authenticated());
